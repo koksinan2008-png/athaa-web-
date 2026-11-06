@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATHAA Fund Collection - SKSBV Madayi Zone</title>
+    <!-- Tailwind CSS for Modern Clean Look -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Supabase JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <!-- Header / Navbar -->
+    <header class="bg-emerald-800 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-bold tracking-wide">ATHAA FUND</h1>
+                <p class="text-xs text-emerald-200">SKSBV Madayi Zone</p>
+            </div>
+            <nav class="space-x-2 md:space-x-4">
+                <button onclick="switchTab('home')" class="px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-emerald-700 transition">Home</button>
+                <button onclick="switchTab('donate')" class="px-3 py-1.5 rounded-lg text-sm font-medium bg-emerald-600 hover:bg-emerald-500 transition shadow">Donate Now</button>
+                <button onclick="switchTab('admin')" class="px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-emerald-700 transition text-emerald-200">Admin</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
+
+        <!-- 1. HOME TAB -->
+        <section id="tab-home" class="space-y-8">
+            <div class="bg-gradient-to-r from-emerald-900 to-teal-800 text-white rounded-3xl p-8 md:p-12 shadow-xl text-center relative overflow-hidden">
+                <div class="relative z-10">
+                    <span class="bg-emerald-700 text-emerald-100 text-xs px-3 py-1 rounded-full uppercase tracking-wider font-semibold">Charity Campaign</span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold mt-4 mb-4">ATHAA Fund Collection</h2>
+                    <p class="text-emerald-100 max-w-2xl mx-auto text-sm md:text-base mb-8">
+                        SKSBV Madayi Zone aavishkarikkunna punyathinte sambhavana. Ee satkarmaayathil ningakkum പങ്കാളികളാകാം.
+                    </p>
+                    <button onclick="switchTab('donate')" class="bg-white text-emerald-900 font-bold px-8 py-3 rounded-xl shadow-lg hover:bg-emerald-50 transition transform hover:-translate-y-0.5">
+                        Contribute Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- Live Stats / Summary -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-slate-400 uppercase font-bold tracking-wider">Total Collection</p>
+                        <h3 id="total-amount-display" class="text-3xl font-black text-emerald-600 mt-1">₹ 0</h3>
+                    </div>
+                    <div class="p-4 bg-emerald-50 rounded-xl text-emerald-600 text-2xl font-bold">₹</div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-slate-400 uppercase font-bold tracking-wider">Total Donors</p>
+                        <h3 id="total-donors-display" class="text-3xl font-black text-teal-600 mt-1">0</h3>
+                    </div>
+                    <div class="p-4 bg-teal-50 rounded-xl text-teal-600 text-2xl font-bold">👥</div>
+                </div>
+            </div>
+
+            <!-- Verified Donations Public Table -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="p-6 border-b border-slate-100">
+                    <h3 class="font-bold text-lg text-slate-800">Recent Contributions (Verified)</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-400 uppercase text-xs">
+                                <th class="p-4 font-semibold">Name</th>
+                                <th class="p-4 font-semibold">Unit</th>
+                                <th class="p-4 font-semibold text-right">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="public-donations-list" class="divide-y divide-slate-100">
+                            <tr><td colspan="3" class="p-6 text-center text-slate-400">Loading data...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. DONATION TAB -->
+        <section id="tab-donate" class="hidden max-w-xl mx-auto space-y-6">
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 space-y-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800">Make a Donation</h2>
+                    <p class="text-xs text-slate-500 mt-1">QR code scan cheythu payment cheythathinu sesham ivide details submit cheyyuka.</p>
+                </div>
+
+                <!-- QR Code Box -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-center space-y-4">
+                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Scan & Pay (Mr Afrad K P)</p>
+                    <div class="inline-block p-2 bg-white rounded-xl shadow-sm border border-slate-200">
+                        <!-- Image provided in context -->
+                        <img src="1000087718.jpg" alt="UPI QR Code" class="w-52 h-52 object-contain mx-auto rounded-lg">
+                    </div>
+                    <p class="text-sm font-mono font-bold text-emerald-700 bg-emerald-50 py-1.5 px-3 rounded-lg inline-block">
+                        UPI ID: 7025144934@ptyes
+                    </p>
+                </div>
+
+                <!-- Donation Form -->
+                <form id="donation-form" onsubmit="handleDonationSubmit(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Your Name</label>
+                        <input type="text" id="donor-name" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Phone Number</label>
+                        <input type="tel" id="donor-phone" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">SKSBV Unit Name</label>
+                        <input type="text" id="donor-unit" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm" placeholder="Eg: Madayi">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Donation Amount (₹)</label>
+                        <input type="number" id="donor-amount" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm" placeholder="500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Transaction ID / UTR No</label>
+                        <input type="text" id="donor-txid" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm" placeholder="UPI Reference Number">
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg hover:bg-emerald-700 transition">
+                        Submit Details
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- 3. ADMIN PANEL TAB -->
+        <section id="tab-admin" class="hidden space-y-6">
+            <!-- Login View -->
+            <div id="admin-login-box" class="max-w-md mx-auto bg-white p-8 rounded-3xl shadow-sm border border-slate-100 space-y-4">
+                <h2 class="text-xl font-bold text-slate-800">Admin Login</h2>
+                <p class="text-xs text-slate-500">Kanakkukal check cheyyan password enter cheyyuka.</p>
+                <input type="password" id="admin-pass" placeholder="Enter Password" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm">
+                <button onclick="adminLogin()" class="w-full bg-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-700 transition">Login</button>
+            </div>
+
+            <!-- Dashboard View -->
+            <div id="admin-dashboard" class="hidden space-y-6">
+                <div class="flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Admin Dashboard</h2>
+                        <p class="text-xs text-slate-400">Pending entries-ukal verify cheythu approve cheyyuka.</p>
+                    </div>
+                    <button onclick="adminLogout()" class="bg-rose-50 text-rose-600 px-4 py-2 rounded-xl text-xs font-bold hover:bg-rose-100 transition">Logout</button>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100">
+                        <h3 class="font-bold text-md text-slate-800">All Submissions</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-400 uppercase text-xs">
+                                    <th class="p-4 font-semibold">Name / Unit</th>
+                                    <th class="p-4 font-semibold">Amount / TXID</th>
+                                    <th class="p-4 font-semibold">Status</th>
+                                    <th class="p-4 font-semibold text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-donations-list" class="divide-y divide-slate-100">
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-100 py-6 text-center text-xs text-slate-400 mt-12">
+        <p>© 2026 SKSBV Madayi Zone. ATHAA Fund Collection.</p>
+    </footer>
+
+    <!-- JavaScript Logic & Supabase Connection -->
+    <script>
+        // REPLACE WITH YOUR SUPABASE DETAILS
+        const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            ['home', 'donate', 'admin'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+            });
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            if(tabId === 'home') fetchPublicData();
+            if(tabId === 'admin' && !document.getElementById('admin-dashboard').classList.contains('hidden')) {
+                fetchAdminData();
+            }
+        }
+
+        // Fetch Public Approved Data & Stats
+        async function fetchPublicData() {
+            const { data, error } = await supabaseClient
+                .from('donations')
+                .select('*')
+                .eq('status', 'Approved')
+                .order('created_at', { ascending: false });
+
+            if(error) { console.error(error); return; }
+
+            let total = 0;
+            let listHtml = '';
+            if(data.length === 0) {
+                listHtml = `<tr><td colspan="3" class="p-6 text-center text-slate-400">No records found yet.</td></tr>`;
+            } else {
+                data.forEach(item => {
+                    total += Number(item.amount);
+                    listHtml += `
+                        <tr class="hover:bg-slate-50">
+                            <td class="p-4">
+                                <p class="font-bold text-slate-800">${item.name}</p>
+                                <p class="text-xs text-slate-400">${item.phone}</p>
+                            </td>
+                            <td class="p-4 text-slate-600">${item.unit}</td>
+                            <td class="p-4 text-right font-bold text-emerald-600">₹${item.amount}</td>
+                        </tr>
+                    `;
+                });
+            }
+            document.getElementById('total-amount-display').innerText = `₹ ${total}`;
+            document.getElementById('total-donors-display').innerText = data.length;
+            document.getElementById('public-donations-list').innerHTML = listHtml;
+        }
+
+        // Handle Donation Form Submit
+        async function handleDonationSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('donor-name').value;
+            const phone = document.getElementById('donor-phone').value;
+            const unit = document.getElementById('donor-unit').value;
+            const amount = document.getElementById('donor-amount').value;
+            const txid = document.getElementById('donor-txid').value;
+
+            const { error } = await supabaseClient
+                .from('donations')
+                .insert([{ name, phone, unit, amount, txid, status: 'Pending' }]);
+
+            if(error) {
+                alert('Error submitting details. Please try again.');
+                console.error(error);
+            } else {
+                alert('Details submitted successfully! Verification-nu sesham list-il varunnathaakunnu.');
+                document.getElementById('donation-form').reset();
+                switchTab('home');
+            }
+        }
+
+        // Admin Login
+        function adminLogin() {
+            const pass = document.getElementById('admin-pass').value;
+            // Simple pass protection (Change 'sksbv2026' to your secure password)
+            if(pass === 'sksbv2026') {
+                document.getElementById('admin-login-box').classList.add('hidden');
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+                fetchAdminData();
+            } else {
+                alert('Incorrect Password!');
+            }
+        }
+
+        function adminLogout() {
+            document.getElementById('admin-dashboard').classList.add('hidden');
+            document.getElementById('admin-login-box').classList.remove('hidden');
+            document.getElementById('admin-pass').value = '';
+        }
+
+        // Fetch Admin Data
+        async function fetchAdminData() {
+            const { data, error } = await supabaseClient
+                .from('donations')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if(error) { console.error(error); return; }
+
+            let listHtml = '';
+            if(data.length === 0) {
+                listHtml = `<tr><td colspan="4" class="p-6 text-center text-slate-400">No entries available.</td></tr>`;
+            } else {
+                data.forEach(item => {
+                    const badgeColor = item.status === 'Approved' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600';
+                    listHtml += `
+                        <tr class="hover:bg-slate-50">
+                            <td class="p-4">
+                                <p class="font-bold text-slate-800">${item.name}</p>
+                                <p class="text-xs text-slate-400">${item.unit} • ${item.phone}</p>
+                            </td>
+                            <td class="p-4">
+                                <p class="font-bold text-slate-800">₹${item.amount}</p>
+                                <p class="text-xs font-mono text-slate-400">TXID: ${item.txid}</p>
+                            </td>
+                            <td class="p-4">
+                                <span class="px-2.5 py-1 rounded-full text-xs font-bold ${badgeColor}">${item.status}</span>
+                            </td>
+                            <td class="p-4 text-right space-x-2">
+                                ${item.status === 'Pending' ? `<button onclick="updateStatus(${item.id}, 'Approved')" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-emerald-700">Approve</button>` : ''}
+                                <button onclick="deleteDonation(${item.id})" class="bg-rose-50 text-rose-600 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-rose-100">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+            document.getElementById('admin-donations-list').innerHTML = listHtml;
+        }
+
+        // Update Status
+        async function updateStatus(id, status) {
+            const { error } = await supabaseClient
+                .from('donations')
+                .update({ status })
+                .eq('id', id);
+            if(!error) fetchAdminData();
+            else alert('Error updating status');
+        }
+
+        // Delete Entry
+        async function deleteDonation(id) {
+            if(confirm('Ee entry delete cheyyanam enn urappano?')) {
+                const { error } = await supabaseClient
+                    .from('donations')
+                    .delete()
+                    .eq('id', id);
+                if(!error) fetchAdminData();
+                else alert('Error deleting entry');
+            }
+        }
+
+        // Load Home Data on initial load
+        window.onload = () => {
+            fetchPublicData();
+        };
+    </script>
+</body>
+</html>
